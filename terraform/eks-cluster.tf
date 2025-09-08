@@ -11,11 +11,10 @@ module "eks" {
   cluster_endpoint_public_access = true
 
   # KMS key configuration - automatically created with unique alias
-  create_kms_key = true
-  kms_key_alias  = {
-  
-   cluster = "alias/eks/${local.cluster_name}-key"
-}
+  create_kms_key  = true
+  kms_key_aliases = {
+    cluster = "alias/eks/${local.cluster_name}-key"
+  }
 
   # Managed Node Group defaults
   eks_managed_node_group_defaults = {
