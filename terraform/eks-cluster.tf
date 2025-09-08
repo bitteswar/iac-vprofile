@@ -13,8 +13,7 @@ module "eks" {
   # KMS key configuration - automatically created with unique alias
   create_kms_key = true
   kms_key_alias  = "alias/eks/${local.cluster_name}-key"  # unique alias per cluster
-  kms_key_description = "KMS key for EKS cluster ${local.cluster_name}"
-  
+
   # Managed Node Group defaults
   eks_managed_node_group_defaults = {
     ami_type = "AL2_x86_64"
