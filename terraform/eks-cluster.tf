@@ -15,9 +15,9 @@ module "eks" {
   kms_key_alias  = "alias/eks/${local.cluster_name}-key"  # unique alias per cluster
 
  # Ensures Terraform can safely destroy resources
-  lifecycle {
-    prevent_destroy = false
-  }
+  #ifecycle {
+ #  prevent_destroy = false
+# }
 
   # Managed Node Group defaults
   eks_managed_node_group_defaults = {
