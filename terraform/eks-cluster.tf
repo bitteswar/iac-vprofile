@@ -15,7 +15,7 @@ module "eks" {
   # ----------------------------
   # KMS key configuration
   # ----------------------------
-  create_kms_key  = true
+  create_kms_key = true
   kms_key_aliases = [
     "alias/eks/${local.cluster_name}-${random_string.kms_suffix.result}"
   ]
