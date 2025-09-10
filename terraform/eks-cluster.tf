@@ -1,3 +1,18 @@
+############################################
+# Random suffix generator for KMS alias
+############################################
+# Generates a 6-character lowercase string (e.g., abc123)
+# This ensures every alias is unique across runs and avoids
+# duplicate alias conflicts when old keys cannot be deleted.
+resource "random_string" "kms_suffix" {
+  length  = 6
+  upper   = false
+  special = false
+}
+
+############################################
+# EKS Cluster with unique KMS key alias
+############################################
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.19.1"
@@ -15,7 +30,11 @@ module "eks" {
   # ----------------------------
   # KMS key configuration
   # ----------------------------
+  # Enable automatic creation of a KMS key for EKS secrets encryption
   create_kms_key = true
+
+  # Attach a UNIQUE alias with random suffix to avoid conflicts
+  # Example: alias/eks/vprofile-eks-abc123
   kms_key_aliases = [
     "alias/eks/${local.cluster_name}-${random_string.kms_suffix.result}"
   ]
@@ -47,13 +66,4 @@ module "eks" {
       desired_size   = 1
     }
   }
-}
-
-# ----------------------------
-# Random suffix for KMS alias
-# ----------------------------
-resource "random_string" "kms_suffix" {
-  length  = 6
-  upper   = false
-  special = false
 }
