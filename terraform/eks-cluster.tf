@@ -2,7 +2,9 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.19.1"
 
+  # ----------------------------
   # Cluster settings
+  # ----------------------------
   cluster_name    = local.cluster_name
   cluster_version = "1.29"
 
@@ -10,16 +12,24 @@ module "eks" {
   subnet_ids                     = module.vpc.private_subnets
   cluster_endpoint_public_access = true
 
-  # KMS key configuration - automatically created with unique alias
+  # ----------------------------
+  # KMS key configuration
+  # ----------------------------
   create_kms_key  = true
-  kms_key_aliases = ["alias/eks/${local.cluster_name}-key"]
+  kms_key_aliases = [
+    "alias/eks/${local.cluster_name}-${random_string.kms_suffix.result}"
+  ]
 
+  # ----------------------------
   # Managed Node Group defaults
+  # ----------------------------
   eks_managed_node_group_defaults = {
     ami_type = "AL2_x86_64"
   }
 
+  # ----------------------------
   # Managed Node Groups
+  # ----------------------------
   eks_managed_node_groups = {
     one = {
       name           = "node-group-1"
@@ -37,4 +47,13 @@ module "eks" {
       desired_size   = 1
     }
   }
+}
+
+# ----------------------------
+# Random suffix for KMS alias
+# ----------------------------
+resource "random_string" "kms_suffix" {
+  length  = 6
+  upper   = false
+  special = false
 }
