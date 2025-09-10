@@ -11,7 +11,7 @@ module "eks" {
   cluster_endpoint_public_access = true
 
   # KMS key configuration - automatically created with unique alias
-  create_kms_key  = true
+  create_kms_key = true
   kms_key_aliases = {
     cluster = "alias/eks/${local.cluster_name}-key"
   }
@@ -40,4 +40,3 @@ module "eks" {
     }
   }
 }
-##
